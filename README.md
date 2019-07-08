@@ -24,4 +24,24 @@ Airflow из докера
 остальное локально запускается
 todo...
 
+## Скрины
+
+![alt text](docs/images/airflow_graph.png "Airflow DAG Graph Example")
+
+![alt text](docs/images/airflow_tree.png "Airflow DAG Graph Example")
+
+![alt text](docs/images/airflow_timeline.png "Airflow DAG Graph Example")
+
+![alt text](docs/images/airflow_chart.png "Airflow DAG Graph Example")
+
+![alt text](docs/images/airflow_logs.png "Airflow DAG Graph Example")
+
+![alt text](docs/images/mongo_history.png "Airflow DAG Graph Example")
+
+![alt text](docs/images/mongo_predictions.png "Airflow DAG Graph Example")
+
+![alt text](docs/images/polynomial_predictor.png "Airflow DAG Graph Example")
+
+
+
 
