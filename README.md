@@ -43,6 +43,8 @@ todo...
 ![alt text](docs/images/mongo_predictions.png "Airflow DAG Graph Example")
 ### Визуализация обученной модели
 ![alt text](docs/images/polynomial_predictor.png "Airflow DAG Graph Example")
+### Проект дашборда
+![alt text](docs/images/dashboard_sketch.png "Airflow DAG Graph Example")
 
 
 
