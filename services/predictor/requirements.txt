@@ -1,0 +1,5 @@
+aiohttp
+sklearn
+pandas
+jupyter
+matplotlib

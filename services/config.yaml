@@ -1,0 +1,14 @@
+databases:
+  mongo:
+    host: docker.for.mac.localhost
+    port: 12345
+    databases:
+      currency_rates: 'cur_rates'
+      stats: 'external_stats'
+        collections:
+          ad_exchange_stats: 'ad_exchange_stats'
+          app_stores_stats: 'app_stores_stats'
+      predictor: 'predictor_db'
+        collections:
+          revenue: 'revenue_predictions'
+
