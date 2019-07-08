@@ -41,7 +41,7 @@ todo...
 ![alt text](docs/images/mongo_history.png "Airflow DAG Graph Example")
 ### Данные прогноза в MongoDB
 ![alt text](docs/images/mongo_predictions.png "Airflow DAG Graph Example")
-### Визуализация обученой модели
+### Визуализация обученной модели
 ![alt text](docs/images/polynomial_predictor.png "Airflow DAG Graph Example")
 
 
