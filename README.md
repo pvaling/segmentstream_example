@@ -1,6 +1,10 @@
 # segmentstream_example
 SegmentStream Test App
 
+Draw.io Chart
+https://drive.google.com/file/d/1WmB1P8F2aTch973tmXorJalT7HWSykBC/view?usp=sharing
+
+
 # Revenue Formats
 ## Store 1
 
