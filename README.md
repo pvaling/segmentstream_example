@@ -19,27 +19,29 @@
 Draw.io Chart
 https://drive.google.com/file/d/1WmB1P8F2aTch973tmXorJalT7HWSykBC/view?usp=sharing
 
+![alt text](docs/images/SegmentStreamOverview.png)
+
 ## Установка
 Airflow из докера
 остальное локально запускается
 todo...
 
 ## Скрины
-
+### Граф процесса
 ![alt text](docs/images/airflow_graph.png "Airflow DAG Graph Example")
-
+### Мониторинг периодических запусков
 ![alt text](docs/images/airflow_tree.png "Airflow DAG Graph Example")
-
+### Диаграмма Ганта
 ![alt text](docs/images/airflow_timeline.png "Airflow DAG Graph Example")
-
+### Динамика времени выполнения операций
 ![alt text](docs/images/airflow_chart.png "Airflow DAG Graph Example")
-
+### Логи исполнения задачи
 ![alt text](docs/images/airflow_logs.png "Airflow DAG Graph Example")
-
+### Исторические данные в MongoDB
 ![alt text](docs/images/mongo_history.png "Airflow DAG Graph Example")
-
+### Данные прогноза в MongoDB
 ![alt text](docs/images/mongo_predictions.png "Airflow DAG Graph Example")
-
+### Визуализация обученой модели
 ![alt text](docs/images/polynomial_predictor.png "Airflow DAG Graph Example")
 
 
