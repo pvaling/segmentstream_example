@@ -28,7 +28,7 @@ todo...
 
 ## Скрины
 ### Граф процесса
-![alt text](docs/images/airflow_graph.png "Airflow DAG Graph Example")
+![alt text](docs/images/airflow_graph2.png "Airflow DAG Graph Example")
 ### Мониторинг периодических запусков
 ![alt text](docs/images/airflow_tree.png "Airflow DAG Graph Example")
 ### Диаграмма Ганта
