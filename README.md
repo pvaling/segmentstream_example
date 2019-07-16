@@ -84,7 +84,7 @@ docker-compose -f docker-compose-CeleryExecutor.yml scale worker=10
 ```bash
 queue='<имя_очереди>'
 например,
-queue='hearvy_tasks'
+queue='heavy_tasks'
 
 ```
 
@@ -94,7 +94,7 @@ make_next_day_prediction = PythonOperator(
     task_id=f"{task_prefix}_make_next_day_prediction",
     python_callable=make_next_day_prediction_callback,
     provide_context=True,
-    queue='hearvy_tasks',
+    queue='heavy_tasks',
     dag=dag_x
 )
 
@@ -132,7 +132,7 @@ worker_hearvy:
     environment:
         - FERNET_KEY=46BKJoQYlPPOexq0OhDZnIlNepKFf87WFwLbfzqDDho=
         - EXECUTOR=Celery
-    command: worker -q hearvy_tasks
+    command: worker -q heavy_tasks
 ```
 
 Список воркеров в Flower (UI для Celery)

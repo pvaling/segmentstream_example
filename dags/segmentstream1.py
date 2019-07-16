@@ -182,7 +182,7 @@ for conf_item in configs:
         task_id=f"{task_prefix}_make_next_day_prediction",
         python_callable=make_next_day_prediction_callback,
         provide_context=True,
-        queue='hearvy_tasks',
+        queue='heavy_tasks',
         dag=dag_x
     )
     make_next_day_prediction.set_upstream(task_or_task_list=check_weekly_historical_data)
