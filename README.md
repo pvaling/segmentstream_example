@@ -119,7 +119,7 @@ worker:
         - EXECUTOR=Celery
     command: worker --autoscale=10,2
 
-worker_hearvy:
+worker_heavy:
     image: puckel/docker-airflow:1.10.3
     restart: always
     depends_on:
