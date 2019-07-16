@@ -6,7 +6,8 @@ from classes.ad_exchange.ad_network_stat_item import AdNetworkStatItem
 
 def transform_table_data(ds, **kwargs):
     task_instance = kwargs['task_instance']
-    data: List[AdNetworkStatItem] = task_instance.xcom_pull(task_ids='extract_from_ad_service')
+    task_prefix = kwargs['task_prefix']
+    data: List[AdNetworkStatItem] = task_instance.xcom_pull(task_ids=f"{task_prefix}_extract_from_ad_service")
 
     new_data = []
     if data:

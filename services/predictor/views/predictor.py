@@ -8,40 +8,42 @@ from motor import motor_asyncio
 def fit(data):
     return True
 
-async def predict(date_for_prediction):
+async def predict(date_for_prediction, account):
     # %%
     from sklearn.linear_model import LinearRegression
 
     import numpy as np
     from sklearn.preprocessing import PolynomialFeatures
 
-    mongo_docs = await get_data_from_db(date_for_prediction)
+    mongo_docs = await get_data_from_db(date_for_prediction, account)
 
     data = []
     for index, item in enumerate(mongo_docs):
         data.append((index, float(item['revenue'])))
     # %%
+    output_revenue, accuracy = None, None
+    if data:
 
-    X = [(x[0],) for x in data]
-    y = [(x[1],) for x in data]
+        X = [(x[0],) for x in data]
+        y = [(x[1],) for x in data]
 
-    X = np.array(X)
-    y = np.array(y)
+        X = np.array(X)
+        y = np.array(y)
 
-    poly = PolynomialFeatures(degree=2)
-    X_poly = poly.fit_transform(X)
+        poly = PolynomialFeatures(degree=2)
+        X_poly = poly.fit_transform(X)
 
-    poly.fit(X_poly, y)
-    lin2 = LinearRegression()
-    lin2.fit(X_poly, y)
-    accuracy = lin2.score(X_poly, y)
+        poly.fit(X_poly, y)
+        lin2 = LinearRegression()
+        lin2.fit(X_poly, y)
+        accuracy = lin2.score(X_poly, y)
 
-    predicted_revenue = lin2.predict(
-        X=poly.fit_transform(np.array([(len(mongo_docs),)]))
-    )
-    # accuracy = 1
+        predicted_revenue = lin2.predict(
+            X=poly.fit_transform(np.array([(len(mongo_docs),)]))
+        )
 
-    output_revenue = round(float(list(predicted_revenue)[0][0]), 2)
+        output_revenue = round(float(list(predicted_revenue)[0][0]), 2)
+
     return output_revenue, accuracy
 
 
@@ -50,7 +52,9 @@ async def make_prediction(request):
     date_from_query = request.query.get('date', None)
     date_from_query = datetime.datetime.strptime(date_from_query, '%d.%m.%Y')
 
-    predicted_revenue, accuracy = await predict(date_from_query)
+    account = request.query.get('account', None)
+
+    predicted_revenue, accuracy = await predict(date_from_query, account)
 
     return web.json_response(
         {
@@ -60,12 +64,13 @@ async def make_prediction(request):
     )
 
 
-async def get_data_from_db(date_from_query):
+async def get_data_from_db(date_from_query, account):
     client = motor_asyncio.AsyncIOMotorClient('localhost', 27017)
     db = client['ss_stats']
     coll = db['revenue']
     cursor = coll.find(
         {
+            'account': account,
             'date': {
                 '$gte': date_from_query - datetime.timedelta(days=7),
                 '$lte': date_from_query

@@ -24,7 +24,47 @@ async def get_rates(request):
                 'rate': str(Decimal(63.5))
             }
         },
+        '09.07.2019': {
+            'RUB': {
+                'rate': str(Decimal(63.5))
+            }
+        },
+        '10.07.2019': {
+            'RUB': {
+                'rate': str(Decimal(63.5))
+            }
+        },
+        '11.07.2019': {
+            'RUB': {
+                'rate': str(Decimal(63.5))
+            }
+        },
+        '12.07.2019': {
+            'RUB': {
+                'rate': str(Decimal(63.5))
+            }
+        },
+        '13.07.2019': {
+            'RUB': {
+                'rate': str(Decimal(63.5))
+            }
+        },
+        '14.07.2019': {
+            'RUB': {
+                'rate': str(Decimal(63.5))
+            }
+        },
+        '15.07.2019': {
+            'RUB': {
+                'rate': str(Decimal(63.5))
+            }
+        },
         '16.07.2019': {
+            'RUB': {
+                'rate': str(Decimal(65.5))
+            }
+        },
+        '17.07.2019': {
             'RUB': {
                 'rate': str(Decimal(65.5))
             }

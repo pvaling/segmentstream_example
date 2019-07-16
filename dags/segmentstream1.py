@@ -39,7 +39,7 @@ default_args = {
     # 'end_date': datetime(2016, 1, 1),
 }
 
-dag_x = DAG("segmentstream_demo", default_args=default_args, schedule_interval=None)
+dag_x = DAG("segmentstream_demo", default_args=default_args, schedule_interval=timedelta(days=1))
 
 initial_task = DummyOperator(task_id='start', dag=dag_x)
 
@@ -76,7 +76,7 @@ for conf_item in configs:
         task_id=f"{task_prefix}_extract_from_ad_service",
         python_callable=extract_from_ad_service_callback,
         provide_context=True,
-        dag=dag_x
+        dag=dag_x,
     )
 
     extract_from_ad_service.set_upstream(dummy_start_task)
@@ -85,7 +85,8 @@ for conf_item in configs:
         task_id=f"{task_prefix}_transform_table_data",
         python_callable=transform_table_data_callback,
         provide_context=True,
-        dag=dag_x
+        dag=dag_x,
+        op_kwargs={'task_prefix': task_prefix}
     )
 
     transform_table_data.set_upstream(task_or_task_list=extract_from_ad_service)
@@ -133,6 +134,7 @@ for conf_item in configs:
     transform_json_data = PythonOperator(
         task_id=f"{task_prefix}_transform_json_data",
         python_callable=transform_json_data_callback,
+        op_kwargs={'task_prefix': task_prefix},
         provide_context=True, dag=dag_x)
 
     transform_json_data.set_upstream(
@@ -145,6 +147,7 @@ for conf_item in configs:
         perform_currency_conversions = PythonOperator(
             task_id=f"{task_prefix}_perform_currency_conversions",
             provide_context=True,
+            op_kwargs={'task_prefix': task_prefix},
             python_callable=perform_currency_conversions_callback,
             dag=dag_x
         )
@@ -155,6 +158,7 @@ for conf_item in configs:
     combine_and_append_datasources = PythonOperator(
         task_id=f"{task_prefix}_combine_and_append_datasources",
         python_callable=combine_and_append_datasources_callback,
+        op_kwargs={'task_prefix': task_prefix},
         provide_context=True,
         dag=dag_x
     )
@@ -171,6 +175,7 @@ for conf_item in configs:
     check_weekly_historical_data = PythonOperator(
         task_id=f"{task_prefix}_check_weekly_historical_data",
         python_callable=check_weekly_historical_data_callback,
+        op_kwargs={'task_prefix': task_prefix},
         provide_context=True,
         dag=dag_x
     )
@@ -181,6 +186,7 @@ for conf_item in configs:
     make_next_day_prediction = PythonOperator(
         task_id=f"{task_prefix}_make_next_day_prediction",
         python_callable=make_next_day_prediction_callback,
+        op_kwargs={'task_prefix': task_prefix},
         provide_context=True,
         queue='heavy_tasks',
         dag=dag_x

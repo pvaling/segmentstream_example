@@ -19,7 +19,7 @@ from pymongo.errors import DuplicateKeyError
 
 from classes.app_store.app_store_stat_item import AppStoreStatItem
 
-sys.path.insert(0,os.path.abspath(os.path.dirname(__file__)))
+sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
 
 
 def get_mongo_connection(kwargs):
@@ -31,7 +31,10 @@ def get_mongo_connection(kwargs):
     client = pymongo.MongoClient(host=connection.host, port=connection.port)
     return client
 
+
 def check_weekly_historical_data_callback(ds, **kwargs):
+    task_prefix = kwargs['task_prefix']
+
     client = get_mongo_connection(kwargs)
     db = client.get_database(name='ss_stats')
     coll = db.get_collection('revenue')
@@ -41,7 +44,7 @@ def check_weekly_historical_data_callback(ds, **kwargs):
 
     try:
         data = []
-        cursor = coll.find({"date": {"$gte": period_start, "$lte": period_end}})
+        cursor = coll.find({"account": task_prefix, "date": {"$gte": period_start, "$lte": period_end}})
         for doc in cursor:
             data.append(doc)
 
@@ -53,9 +56,14 @@ def check_weekly_historical_data_callback(ds, **kwargs):
 
 def combine_and_append_datasources_callback(ds, **kwargs):
     task_instance = kwargs['task_instance']
+    task_prefix = kwargs['task_prefix']
 
-    app_store_stats: List[AppStoreStatItem] = task_instance.xcom_pull(task_ids='perform_currency_conversions')
-    ad_exchange_stats = task_instance.xcom_pull(task_ids='transform_table_data')
+    app_store_stats: List[AppStoreStatItem] = task_instance.xcom_pull(
+        task_ids=f"{task_prefix}_perform_currency_conversions")
+    if not app_store_stats:
+        app_store_stats: List[AppStoreStatItem] = task_instance.xcom_pull(task_ids=f"{task_prefix}_transform_json_data")
+
+    ad_exchange_stats = task_instance.xcom_pull(task_ids=f"{task_prefix}_transform_table_data")
 
     out = []
     if app_store_stats:
@@ -76,15 +84,19 @@ def combine_and_append_datasources_callback(ds, **kwargs):
 
     sum = str(daily_sum)
 
-
     client = get_mongo_connection(kwargs)
     db = client.get_database(name='ss_stats')
     coll = db.get_collection('revenue')
-    coll.create_index(keys=[('date', pymongo.ASCENDING)], unique=True)
+    coll.create_index(keys=[('account', pymongo.ASCENDING), ('date', pymongo.ASCENDING)], unique=False)
 
     try:
-        today = datetime.combine(date.today(), time())
-        coll.insert({'date': today, 'revenue': sum})
+        # today = datetime.combine(date.today(), time())
+        logging.info(task_instance.execution_date)
+        logging.info(type(task_instance.execution_date))
+        run_date = datetime.fromtimestamp(task_instance.execution_date.timestamp()).replace(hour=0, minute=0, second=0,
+                                                                                            tzinfo=None)
+        coll.update({'account': task_prefix, 'date': run_date},
+                    {'revenue': sum, 'account': task_prefix, 'date': run_date}, True)
     except DuplicateKeyError as e:
         logging.exception(e)
 
@@ -93,7 +105,9 @@ def combine_and_append_datasources_callback(ds, **kwargs):
 
 def perform_currency_conversions_callback(ds, **kwargs):
     task_instance = kwargs['task_instance']
-    app_store_data = task_instance.xcom_pull(task_ids='transform_json_data')
+    task_prefix = kwargs['task_prefix']
+
+    app_store_data = task_instance.xcom_pull(task_ids=f"{task_prefix}_transform_json_data")
     currency_conversion_rates = task_instance.xcom_pull(task_ids='get_daily_conversion_rates')
 
     # apply currency exchange rates here
@@ -102,16 +116,24 @@ def perform_currency_conversions_callback(ds, **kwargs):
 
 
 def make_next_day_prediction_callback(ds, **kwargs):
+    task_prefix = kwargs['task_prefix']
+
     if kwargs.get('test_mode'):
         connection = Connection(host='0.0.0.0', port=9094)
     else:
         connection = BaseHook.get_connection("prediction_service")
 
-    date_for_prediction = datetime.now() + timedelta(1)
+    task_instance = kwargs['task_instance']
+
+    date_for_prediction = datetime.fromtimestamp(task_instance.execution_date.timestamp())
 
     response = requests.get(
-        url="http://{host}:{port}/make_prediction?date={date}".format(host=connection.host, port=connection.port,
-                                                                date=(date_for_prediction).strftime('%d.%m.%Y'))
+        url="http://{host}:{port}/make_prediction?date={date}&account={account}".format(
+            host=connection.host,
+            port=connection.port,
+            date=(date_for_prediction).strftime('%d.%m.%Y'),
+            account=task_prefix
+        )
     )
 
     prediction = response.json()
@@ -120,12 +142,17 @@ def make_next_day_prediction_callback(ds, **kwargs):
     db = client.get_database(name='ss_stats')
     coll = db.get_collection('revenue_predictions')
 
-    coll.insert(
+    coll.update({
+            'date': date_for_prediction,
+            'account': task_prefix
+        },
         {
             'date': date_for_prediction,
+            'account': task_prefix,
             'revenue': prediction['revenue'],
             'accuracy': prediction['accuracy']
-        }
+        },
+        True
     )
 
     return prediction
