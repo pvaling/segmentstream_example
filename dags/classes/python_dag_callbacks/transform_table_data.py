@@ -9,12 +9,13 @@ def transform_table_data(ds, **kwargs):
     data: List[AdNetworkStatItem] = task_instance.xcom_pull(task_ids='extract_from_ad_service')
 
     new_data = []
-    for item in data:
-        new_data.append({
-            'source': 'ad_exchange',  # feature for prediction model
-            'date': item.date,
-            'revenue': item.revenue
-        })
+    if data:
+        for item in data:
+            new_data.append({
+                'source': 'ad_exchange',  # feature for prediction model
+                'date': item.date,
+                'revenue': item.revenue
+            })
 
     logging.info(data)
     logging.info(new_data)

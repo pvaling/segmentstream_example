@@ -58,12 +58,13 @@ def combine_and_append_datasources_callback(ds, **kwargs):
     ad_exchange_stats = task_instance.xcom_pull(task_ids='transform_table_data')
 
     out = []
+    if app_store_stats:
+        for item in app_store_stats:
+            out.append({'date': item.date, 'value': item.revenue})
 
-    for item in app_store_stats:
-        out.append({'date': item.date, 'value': item.revenue})
-
-    for item in ad_exchange_stats:
-        out.append({'date': item['date'], 'value': item['revenue']})
+    if ad_exchange_stats:
+        for item in ad_exchange_stats:
+            out.append({'date': item['date'], 'value': item['revenue']})
 
     # maybe sum is what we need
 

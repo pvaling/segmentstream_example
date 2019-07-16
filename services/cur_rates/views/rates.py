@@ -24,6 +24,11 @@ async def get_rates(request):
                 'rate': str(Decimal(63.5))
             }
         },
+        '16.07.2019': {
+            'RUB': {
+                'rate': str(Decimal(65.5))
+            }
+        },
     }
 
     out = rates.get(date_from_query, None)
