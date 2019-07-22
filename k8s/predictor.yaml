@@ -1,42 +1,42 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: ad-exchange
+  name: predictor
   labels:
-    app: ad-exchange
+    app: predictor
     tier: backend
 spec:
   type: LoadBalancer
   ports:
-  - port: 9092
-    targetPort: 9092
+  - port: 9094
+    targetPort: 9094
   selector:
-    app: ad-exchange
+    app: predictor
     tier: backend
 
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ad-exchange
+  name: predictor
 spec:
   selector:
     matchLabels:
-      app: ad-exchange
+      app: predictor
       tier: backend
   replicas: 1
   template:
     metadata:
       labels:
-        app: ad-exchange
+        app: predictor
         tier: backend
     spec:
       containers:
-      - name: ad-exchange
-        image: ad_exchange_mock:0.1
+      - name: predictor
+        image: predictor_mock:0.1.1
         resources:
           requests:
             cpu: 100m
             memory: 100Mi
         ports:
-        - containerPort: 9092
+        - containerPort: 9094

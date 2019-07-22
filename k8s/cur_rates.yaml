@@ -1,42 +1,42 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: ad-exchange
+  name: cur-rates
   labels:
-    app: ad-exchange
+    app: cur-rates
     tier: backend
 spec:
   type: LoadBalancer
   ports:
-  - port: 9092
-    targetPort: 9092
+  - port: 9093
+    targetPort: 9093
   selector:
-    app: ad-exchange
+    app: cur-rates
     tier: backend
 
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ad-exchange
+  name: cur-rates
 spec:
   selector:
     matchLabels:
-      app: ad-exchange
+      app: cur-rates
       tier: backend
   replicas: 1
   template:
     metadata:
       labels:
-        app: ad-exchange
+        app: cur-rates
         tier: backend
     spec:
       containers:
-      - name: ad-exchange
-        image: ad_exchange_mock:0.1
+      - name: cur-rates
+        image: cur_rates_mock:0.1
         resources:
           requests:
             cpu: 100m
             memory: 100Mi
         ports:
-        - containerPort: 9092
+        - containerPort: 9093
