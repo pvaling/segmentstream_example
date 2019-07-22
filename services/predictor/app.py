@@ -1,3 +1,4 @@
+import yaml
 from aiohttp import web
 
 from views.predictor import make_prediction

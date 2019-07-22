@@ -2,7 +2,7 @@ import pathlib
 import yaml
 
 BASE_DIR = pathlib.Path(__file__).parent.parent
-config_path = BASE_DIR / 'dashboard/config' / 'app.yaml'
+config_path = BASE_DIR / 'dashboard/config.yaml'
 
 def get_config(path):
     with open(path) as f:

@@ -126,6 +126,7 @@ def make_next_day_prediction_callback(ds, **kwargs):
     task_instance = kwargs['task_instance']
 
     date_for_prediction = datetime.fromtimestamp(task_instance.execution_date.timestamp())
+    date_for_prediction += timedelta(days=1)
 
     response = requests.get(
         url="http://{host}:{port}/make_prediction?date={date}&account={account}".format(

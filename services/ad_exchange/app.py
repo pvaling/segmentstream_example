@@ -1,6 +1,7 @@
+import yaml
 from aiohttp import web
-
 from views.stats import get_stats
+
 
 async def handle(request):
     name = request.match_info.get('name', "Anonymous")

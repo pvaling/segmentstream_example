@@ -4,18 +4,14 @@ import pprint
 from aiohttp import web
 from motor import motor_asyncio
 
-
-def fit(data):
-    return True
-
-async def predict(date_for_prediction, account):
+async def predict(date_for_prediction, account, config):
     # %%
     from sklearn.linear_model import LinearRegression
 
     import numpy as np
     from sklearn.preprocessing import PolynomialFeatures
 
-    mongo_docs = await get_data_from_db(date_for_prediction, account)
+    mongo_docs = await get_data_from_db(date_for_prediction, account, config)
 
     data = []
     for index, item in enumerate(mongo_docs):
@@ -54,7 +50,9 @@ async def make_prediction(request):
 
     account = request.query.get('account', None)
 
-    predicted_revenue, accuracy = await predict(date_from_query, account)
+    config = request.app.config
+
+    predicted_revenue, accuracy = await predict(date_from_query, account, config)
 
     return web.json_response(
         {
@@ -64,8 +62,11 @@ async def make_prediction(request):
     )
 
 
-async def get_data_from_db(date_from_query, account):
-    client = motor_asyncio.AsyncIOMotorClient('localhost', 27017)
+async def get_data_from_db(date_from_query, account, config):
+    mongo_host = config.get('mongo', {}).get('host')
+    mongo_port = config.get('mongo', {}).get('port')
+    
+    client = motor_asyncio.AsyncIOMotorClient(mongo_host, mongo_port)
     db = client['ss_stats']
     coll = db['revenue']
     cursor = coll.find(
