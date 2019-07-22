@@ -38,6 +38,24 @@ MongoDB из докера
 
 todo...
 
+## Kubernetes
+Система готовится к запуску внутри kubernetes.
+
+### Сборка Docker-контейнеров
+Внутри папки с сервисами есть Docker файлы.
+Сначала нужно собрать контейнеры для каждого сервиса.
+
+### Деплой сервисов в kubernetes кластер
+
+```bash
+kubectl apply -R -f k8s
+```
+
+### Деплой файлов конфигурации
+```bash
+kubectl create configmap ss-config --from-file=k8s/config.yaml
+```
+
 ## Скрины
 ### Граф процесса
 ![alt text](docs/images/airflow_graph2.png "Airflow DAG Graph Example")

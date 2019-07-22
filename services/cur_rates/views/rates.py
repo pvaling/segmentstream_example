@@ -64,13 +64,49 @@ async def get_rates(request):
                 'rate': str(Decimal(65.5))
             }
         },
-        '17.07.2019': {
+        '18.07.2019': {
+            'RUB': {
+                'rate': str(Decimal(65.5))
+            }
+        },
+        '19.07.2019': {
+            'RUB': {
+                'rate': str(Decimal(65.5))
+            }
+        },
+        '20.07.2019': {
+            'RUB': {
+                'rate': str(Decimal(65.5))
+            }
+        },
+        '21.07.2019': {
+            'RUB': {
+                'rate': str(Decimal(65.5))
+            }
+        },
+        '22.07.2019': {
+            'RUB': {
+                'rate': str(Decimal(65.5))
+            }
+        },
+        '23.07.2019': {
+            'RUB': {
+                'rate': str(Decimal(65.5))
+            }
+        },
+        '24.07.2019': {
             'RUB': {
                 'rate': str(Decimal(65.5))
             }
         },
     }
 
-    out = rates.get(date_from_query, None)
+    default_rate = {
+        'RUB': {
+            'rate': str(Decimal(65.5))
+        }
+    }
+
+    out = rates.get(date_from_query, default_rate)
 
     return web.json_response(out)

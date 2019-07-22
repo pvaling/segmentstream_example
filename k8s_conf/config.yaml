@@ -1,0 +1,22 @@
+mongo:
+  host: docker.for.mac.localhost
+  port: 27017
+  db: 'ss_stats'
+  collections:
+    revenue: 'revenue'
+    revenue_predictions: 'revenue_predictions'
+
+
+services:
+  ad_exchange:
+    host: 'ad-exchange'
+    port: 9092
+  app_store:
+    host: 'app-store'
+    port: 9091
+  cur_rates:
+    host: 'cur-rates'
+    port: 9093
+  predictor:
+    host: 'predictor'
+    port: 9094

@@ -8,6 +8,12 @@ async def handle(request):
     return web.Response(text=text)
 
 app = web.Application()
+
+with open("config.yaml", "r") as f:
+    config = yaml.load(f)
+if config:
+    app.config = config
+
 app.add_routes([
     web.get('/', handle),
     web.get('/make_prediction', make_prediction),

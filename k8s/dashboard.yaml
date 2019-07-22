@@ -40,3 +40,13 @@ spec:
             memory: 100Mi
         ports:
         - containerPort: 9095
+        volumeMounts:
+          - name: conf
+            mountPath: /app/config.yaml
+            subPath: config.yaml
+            readOnly: false
+      volumes:
+        - name: conf
+          configMap:
+            name: ss-config
+            defaultMode: 0755

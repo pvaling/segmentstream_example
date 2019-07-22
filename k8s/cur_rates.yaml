@@ -19,6 +19,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: cur-rates
+  labels:
+    config_version: "0.1"
 spec:
   selector:
     matchLabels:
@@ -33,10 +35,20 @@ spec:
     spec:
       containers:
       - name: cur-rates
-        image: cur_rates_mock:0.1
+        image: cur_rates_mock:0.1.3
         resources:
           requests:
             cpu: 100m
             memory: 100Mi
         ports:
         - containerPort: 9093
+        volumeMounts:
+          - name: conf
+            mountPath: /app/config.yaml
+            subPath: config.yaml
+            readOnly: false
+      volumes:
+        - name: conf
+          configMap:
+            name: ss-config
+            defaultMode: 0755
