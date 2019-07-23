@@ -34,24 +34,10 @@
     var myChart = new Chart(ctx, {
         type: 'line',
         data: {
-            labels: [
-                'Sunday',
-                'Monday',
-                'Tuesday',
-                'Wednesday',
-                'Thursday',
-                'Friday',
-                'Saturday'
-            ],
+            labels: $('#myChart').parent('.chart-wrapper').data('series-labels'),
             datasets: [{
                 label: 'Fact',
-                data: [
-                    15339,
-                    21345,
-                    18483,
-                    24003,
-                    23489
-                ],
+                data: $('#myChart').parent('.chart-wrapper').data('series-fact'),
                 lineTension: 0.2,
                 backgroundColor: 'transparent',
                 borderColor: '#007bff',
@@ -62,15 +48,7 @@
                     label: 'Plan',
                     borderDash: [5, 5],
                     lineTension: 0.2,
-                    data: [
-                        null,
-                        null,
-                        null,
-                        null,
-                        23489,
-                        20345,
-                        16483
-                    ],
+                    data: $('#myChart').parent('.chart-wrapper').data('series-plan'),
                     backgroundColor: 'transparent',
                     borderColor: '#ff1a23',
                     borderWidth: 4,

@@ -139,7 +139,13 @@
             </div>
             <div class="row">
                 <div class="col-md-8">
-                    <canvas class="my-4 w-100" id="myChart" width="900" height="200"></canvas>
+                    <div class="chart-wrapper"
+                         data-series-fact="{{ series_data.fact }}"
+                         data-series-plan="{{ series_data.plan }}"
+                         data-series-labels="{{ series_data.labels }}"
+                    >
+                        <canvas class="my-4 w-100" id="myChart" width="900" height="200"></canvas>
+                    </div>
                 </div>
                 <div class="col-md-4">
                     <canvas class="my-4 " id="myPie" width="900" height="400"></canvas>
@@ -161,7 +167,7 @@
                     <tbody>
 
                     {% for item in fact_data %}
-                        <tr class="">
+                        <tr class="text-primary">
                             <td>{{ item.date }}</td>
                             <td>{{ item.revenue }}</td>
                             <td>ipsum</td>
@@ -170,7 +176,7 @@
                         </tr>
                     {% endfor %}
                     {% for item in predict_data %}
-                        <tr class="text-warning">
+                        <tr class="text-danger">
                             <td>{{ item.date }}</td>
                             <td>{{ item.revenue }}</td>
                             <td>ipsum</td>
