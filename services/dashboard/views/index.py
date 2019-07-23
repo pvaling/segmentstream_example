@@ -17,7 +17,10 @@ async def index(request):
     chart_series_fact = [x['revenue'] for x in fact_data]
     chart_series_fact_labels = [str(x['date']) for x in fact_data]
     chart_series_plan = [x['revenue'] for x in predict_data]
-    for i in range(0, len(chart_series_fact)):
+
+    chart_series_plan.insert(0, chart_series_fact[-1])
+
+    for i in range(1, len(chart_series_fact)):
         chart_series_plan.insert(0, None)
 
     for predict_item in predict_data:

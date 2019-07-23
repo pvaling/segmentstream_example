@@ -16,7 +16,7 @@ from classes.python_dag_callbacks.callbacks import check_weekly_historical_data_
 from classes.python_dag_callbacks.transform_json_data import transform_json_data_callback
 from classes.python_dag_callbacks.user_config import get_config
 
-sys.path.insert(0,os.path.abspath(os.path.dirname(__file__)))
+sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
 
 from airflow.operators.python_operator import PythonOperator
 from airflow.operators.sensors import HttpSensor
