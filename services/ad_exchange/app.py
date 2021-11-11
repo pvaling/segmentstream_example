@@ -5,7 +5,7 @@ from views.stats import get_stats
 
 async def handle(request):
     name = request.match_info.get('name', "Anonymous")
-    text = "v2 - Hello, " + name
+    text = "v3 - Hello, " + name
     return web.Response(text=text)
 
 app = web.Application()
