@@ -36,6 +36,6 @@ jobs:
               aws_secret_key: ${{ secrets.SEGMENTSTREAM_GITHUB_PROD_SECRET }}
               application_name: ad_exchange
               environment_name: ad-exchange-prod
-              version_label: 1.0
+              version_label: ${{ github.run_number }}
               region: eu-central-1
               deployment_package: ./services/ad_exchange/deploy.zip
